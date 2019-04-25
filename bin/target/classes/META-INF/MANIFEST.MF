@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Implementation-Title: clinica
+Implementation-Version: 0.0.1-SNAPSHOT
+Built-By: Kerlyson
+Implementation-Vendor-Id: lpweb.projeto
+Build-Jdk: 1.8.0_60
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
+ ot-starter-parent/clinica
+Created-By: Maven Integration for Eclipse
+
