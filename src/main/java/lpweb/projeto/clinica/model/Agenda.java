@@ -22,16 +22,16 @@ public class Agenda {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 	
-	@ManyToOne
-	@JoinColumn(name = "medico_id")
-	@JsonIgnore
-	private Medico medico;
+	// @ManyToOne
+	// @JoinColumn(name = "medico_id")
+	// @JsonIgnore
+	// private Medico medico;
 	
 	@Column(name = "data_horario")
 	private Date dataHorario;
 	
 	public Agenda() {}
-
+	/*
 	public Medico getMedico() {
 		return medico;
 	}
@@ -39,7 +39,7 @@ public class Agenda {
 	public void setMedico(Medico medico) {
 		this.medico = medico;
 	}
-
+	*/
 	public Integer getId() {
 		return id;
 	}
@@ -60,9 +60,7 @@ public class Agenda {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dataHorario == null) ? 0 : dataHorario.hashCode());
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + ((medico == null) ? 0 : medico.hashCode());
 		return result;
 	}
 
@@ -75,27 +73,17 @@ public class Agenda {
 		if (getClass() != obj.getClass())
 			return false;
 		Agenda other = (Agenda) obj;
-		if (dataHorario == null) {
-			if (other.dataHorario != null)
-				return false;
-		} else if (!dataHorario.equals(other.dataHorario))
-			return false;
 		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
-			return false;
-		if (medico == null) {
-			if (other.medico != null)
-				return false;
-		} else if (!medico.equals(other.medico))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Agenda [id=" + id + ", medico=" + medico + ", dataHorario=" + dataHorario + "]";
+		return "Agenda [id=" + id + ", dataHorario=" + dataHorario + "]";
 	}
 
 	
