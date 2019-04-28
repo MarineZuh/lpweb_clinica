@@ -25,7 +25,6 @@ public class Medico {
 	private String crm;
 	
 	@OneToMany(mappedBy = "medico")
-	@JsonIgnore
 	private List<Agenda> agendas = new ArrayList<>();
 	
 	public Medico() {}

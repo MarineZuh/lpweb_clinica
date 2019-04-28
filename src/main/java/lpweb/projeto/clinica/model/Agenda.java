@@ -2,6 +2,7 @@ package lpweb.projeto.clinica.model;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -26,6 +27,7 @@ public class Agenda {
 	@JsonIgnore
 	private Medico medico;
 	
+	@Column(name = "data_horario")
 	private Date dataHorario;
 	
 	public Agenda() {}
