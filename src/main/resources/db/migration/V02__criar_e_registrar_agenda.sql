@@ -1,4 +1,4 @@
-    
+
 CREATE TABLE agenda (
   id INT NOT NULL AUTO_INCREMENT,
   medico_id INT NOT NULL,
