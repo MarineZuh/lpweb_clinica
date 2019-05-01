@@ -1,16 +1,11 @@
 package lpweb.projeto.clinica.model;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,6 +16,10 @@ public class Agenda {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+	@ElementCollection
+	@CollectionTable(name = "datas_agenda", joinColumns = @JoinColumn(name = "agenda_id"))
+	@Column(name = "data")
+	private List<LocalDateTime> datas = new ArrayList();
 	
 	// @ManyToOne
 	// @JoinColumn(name = "medico_id")
