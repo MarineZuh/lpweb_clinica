@@ -6,7 +6,7 @@ Criação de uma API REST com Spring Boot.
 Sistema de Consultas Médicas.  
 Dr. Monteiro contratou uma empresa para informatizar seu consultório.
 ## Diagrama de classe
-![diagrama de classe v03](https://i.imgur.com/1Zkv2cx.png)
+![diagrama de classe v04](https://i.imgur.com/FMJ1y5z.png)
 ## Uso
 // TODO
 
