@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lpweb.projeto.clinica.model.enums.DiaDaSemana;
 
 @Entity
 @Table(name = "agenda")
@@ -16,8 +17,12 @@ public class Agenda {
 	@Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+	@Enumerated(EnumType.STRING)
+	private DiaDaSemana diaDaSemana;
+
 	@ElementCollection
-	@CollectionTable(name = "datas_agenda", joinColumns = @JoinColumn(name = "agenda_id"))
+	@CollectionTable(name = "agenda_datas", joinColumns = @JoinColumn(name = "agenda_id"))
 	@Column(name = "data")
 	private List<LocalDateTime> datas = new ArrayList();
 	
@@ -25,9 +30,7 @@ public class Agenda {
 	// @JoinColumn(name = "medico_id")
 	// @JsonIgnore
 	// private Medico medico;
-	
-	@Column(name = "data_horario")
-	private Date dataHorario;
+
 	
 	public Agenda() {}
 	/*
@@ -39,6 +42,7 @@ public class Agenda {
 		this.medico = medico;
 	}
 	*/
+
 	public Integer getId() {
 		return id;
 	}
@@ -47,12 +51,20 @@ public class Agenda {
 		this.id = id;
 	}
 
-	public Date getDataHorario() {
-		return dataHorario;
+	public DiaDaSemana getDiaDaSemana() {
+		return diaDaSemana;
 	}
 
-	public void setDataHorario(Date dataHorario) {
-		this.dataHorario = dataHorario;
+	public void setDiaDaSemana(DiaDaSemana diaDaSemana) {
+		this.diaDaSemana = diaDaSemana;
+	}
+
+	public List<LocalDateTime> getDatas() {
+		return datas;
+	}
+
+	public void setDatas(List<LocalDateTime> datas) {
+		this.datas = datas;
 	}
 
 	@Override
@@ -82,11 +94,10 @@ public class Agenda {
 
 	@Override
 	public String toString() {
-		return "Agenda [id=" + id + ", dataHorario=" + dataHorario + "]";
+		return "Agenda{" +
+				"id=" + id +
+				", diaDaSemana=" + diaDaSemana +
+				", datas=" + datas +
+				'}';
 	}
-
-	
-
-		
-	
 }
