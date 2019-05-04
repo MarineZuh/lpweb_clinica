@@ -1,6 +1,6 @@
 package lpweb.projeto.clinica.model;
 
-public class PrescricaoMedicamento extends AbstractPrescricao{
+public class PrescricaoMedicamento {
     private Medicamento medicamento;
     private String dosagem;
     private String administração;

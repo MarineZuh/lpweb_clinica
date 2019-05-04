@@ -9,8 +9,8 @@ public class Prontuario {
 	private Consulta consulta;
 	private String sintomas;
 	private String observacaoClinica;
-	private List<AbstractPrescricao> prescricoes = new ArrayList();
-
+	private List<PrescricaoMedicamento> prescricoesMedicamento = new ArrayList();
+    private List<Exame> prescricoesExame = new ArrayList();
     public Prontuario() {
     }
 
@@ -46,12 +46,20 @@ public class Prontuario {
         this.observacaoClinica = observacaoClinica;
     }
 
-    public List<AbstractPrescricao> getPrescricoes() {
-        return prescricoes;
+    public List<PrescricaoMedicamento> getPrescricoesMedicamento() {
+        return prescricoesMedicamento;
     }
 
-    public void setPrescricoes(List<AbstractPrescricao> prescricoes) {
-        this.prescricoes = prescricoes;
+    public void setPrescricoesMedicamento(List<PrescricaoMedicamento> prescricoesMedicamento) {
+        this.prescricoesMedicamento = prescricoesMedicamento;
+    }
+
+    public List<Exame> getPrescricoesExame() {
+        return prescricoesExame;
+    }
+
+    public void setPrescricoesExame(List<Exame> prescricoesExame) {
+        this.prescricoesExame = prescricoesExame;
     }
 
     @Override
@@ -74,7 +82,8 @@ public class Prontuario {
                 ", consulta=" + consulta +
                 ", sintomas='" + sintomas + '\'' +
                 ", observacaoClinica='" + observacaoClinica + '\'' +
-                ", prescricoes=" + prescricoes +
+                ", prescricoesMedicamento=" + prescricoesMedicamento +
+                ", prescricoesExame=" + prescricoesExame +
                 '}';
     }
 }
