@@ -15,7 +15,7 @@ O sistema deve:
  - Registrar exames
  - Registrar agenda do médico
 ## Diagrama de classe
-![diagrama de classe v04](https://i.imgur.com/FMJ1y5z.png)
+![diagrama de classe v04](https://i.imgur.com/70h6r4K.png)
 ## Uso
 // TODO
 
