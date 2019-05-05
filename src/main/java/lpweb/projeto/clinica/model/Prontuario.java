@@ -15,6 +15,9 @@ public class Prontuario {
 	private String sintomas;
 	private String observacaoClinica;
 
+    @OneToOne(mappedBy = "prontuario")
+	private Consulta consulta;
+
     @OneToOne
     @JoinColumn(name = "historico_peso_altura_id")
     private HistoricoPesoAltura historicoPesoAltura;
@@ -74,6 +77,13 @@ public class Prontuario {
     }
     public void setHistoricoPesoAltura(HistoricoPesoAltura historicoPesoAltura) {
         this.historicoPesoAltura = historicoPesoAltura;
+    }
+
+    public Consulta getConsulta() {
+        return consulta;
+    }
+    public void setConsulta(Consulta consulta) {
+        this.consulta = consulta;
     }
 
     @Override
