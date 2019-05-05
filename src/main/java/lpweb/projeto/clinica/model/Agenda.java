@@ -1,6 +1,7 @@
 package lpweb.projeto.clinica.model;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,9 +23,9 @@ public class Agenda {
 	private DiaDaSemana diaDaSemana;
 
 	@ElementCollection
-	@CollectionTable(name = "agenda_datas", joinColumns = @JoinColumn(name = "agenda_id"))
-	@Column(name = "data")
-	private List<LocalDateTime> datas = new ArrayList();
+	@CollectionTable(name = "agenda_horarios", joinColumns = @JoinColumn(name = "agenda_id"))
+	@Column(name = "horario")
+	private List<LocalTime> horarios = new ArrayList();
 	
 	// @ManyToOne
 	// @JoinColumn(name = "medico_id")
@@ -59,12 +60,12 @@ public class Agenda {
 		this.diaDaSemana = diaDaSemana;
 	}
 
-	public List<LocalDateTime> getDatas() {
-		return datas;
+	public List<LocalTime> getHorarios() {
+		return horarios;
 	}
 
-	public void setDatas(List<LocalDateTime> datas) {
-		this.datas = datas;
+	public void setHorarios(List<LocalTime> horarios) {
+		this.horarios = horarios;
 	}
 
 	@Override
@@ -97,7 +98,7 @@ public class Agenda {
 		return "Agenda{" +
 				"id=" + id +
 				", diaDaSemana=" + diaDaSemana +
-				", datas=" + datas +
+				", horarios=" + horarios +
 				'}';
 	}
 }

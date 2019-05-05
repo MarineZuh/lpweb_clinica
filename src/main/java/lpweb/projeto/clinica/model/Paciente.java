@@ -32,21 +32,18 @@ public class Paciente {
 	private Date dataNascimento;
 
 	private char sexo;
-	// private List<Prontuario> prontuarios = new ArrayList<>();
-
-	// @Column(name = "historico_peso_altura")
-	// private List<HistoricoPesoAltura> historicoPesoAltura = new ArrayList<>();
 
 	@OneToMany
-    @JoinColumn(name = "paciente_id")
+    @JoinColumn(name = "paciente_id") // coluna na tabela telefone
 	private List<Telefone> telefones = new ArrayList<>();
 	
 	@ManyToOne
     @JoinColumn(name = "endereco_id")
 	private Endereco endereco;
 
-	// @Column(name = "plano_saude")
-	// private PlanoSaude planoSaude;
+	@ManyToOne
+	@JoinColumn(name = "plano_saude_id")
+	private PlanoSaude planoSaude;
 
 	public Paciente() {
 	}
@@ -54,7 +51,6 @@ public class Paciente {
 	public Integer getId() {
 		return id;
 	}
-
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -62,7 +58,6 @@ public class Paciente {
 	public String getNomeCrianca() {
 		return nomeCrianca;
 	}
-
 	public void setNomeCrianca(String nomeCrianca) {
 		this.nomeCrianca = nomeCrianca;
 	}
@@ -70,7 +65,6 @@ public class Paciente {
 	public String getnomeResponsavel() {
 		return nomeResponsavel;
 	}
-
 	public void setnomeResponsavel(String nomeResponsavel) {
 		this.nomeResponsavel = nomeResponsavel;
 	}
@@ -78,7 +72,6 @@ public class Paciente {
 	public Date getDataNascimento() {
 		return dataNascimento;
 	}
-
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
@@ -86,7 +79,6 @@ public class Paciente {
 	public char getSexo() {
 		return sexo;
 	}
-
 	public void setSexo(char sexo) {
 		this.sexo = sexo;
 	}
@@ -94,7 +86,6 @@ public class Paciente {
 	public List<Telefone> getTelefones() {
 		return telefones;
 	}
-
 	public void setTelefones(List<Telefone> telefones) {
 		this.telefones = telefones;
 	}
@@ -102,10 +93,15 @@ public class Paciente {
 	public Endereco getEndereco() {
 		return endereco;
 	}
-
 	public void setEndereco(Endereco endereco) {
 		this.endereco = endereco;
 	}
+
+	public String getNomeResponsavel() { return nomeResponsavel; }
+	public void setNomeResponsavel(String nomeResponsavel) { this.nomeResponsavel = nomeResponsavel; }
+
+	public PlanoSaude getPlanoSaude() {	return planoSaude; }
+	public void setPlanoSaude(PlanoSaude planoSaude) { this.planoSaude = planoSaude; }
 
 	@Override
 	public int hashCode() {
