@@ -62,13 +62,6 @@ public class Paciente {
 		this.nomeCrianca = nomeCrianca;
 	}
 
-	public String getnomeResponsavel() {
-		return nomeResponsavel;
-	}
-	public void setnomeResponsavel(String nomeResponsavel) {
-		this.nomeResponsavel = nomeResponsavel;
-	}
-
 	public Date getDataNascimento() {
 		return dataNascimento;
 	}

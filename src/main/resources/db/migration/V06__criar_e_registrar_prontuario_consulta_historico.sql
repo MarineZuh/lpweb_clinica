@@ -36,3 +36,6 @@ CREATE TABLE IF NOT EXISTS `prontuario_exames`
     `exame_id`      INT(11) NOT NULL
 ) engine = InnoDB
   DEFAULT CHARSET = utf8;
+
+INSERT INTO consulta(data_horario, eh_encaixe, eh_paciente_novo, medico_id, paciente_id)
+    VALUES ('2019-05-05 14:30:00', false, false, 1, 1);
