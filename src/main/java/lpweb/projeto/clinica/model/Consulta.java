@@ -12,15 +12,15 @@ public class Consulta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDateTime dataHorario;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "medico_id")
     private Medico medico;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "paciente_id")
     private Paciente paciente;
     private Boolean ehEncaixe;
     private Boolean ehPacienteNovo;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "prontuario_id")
     private Prontuario prontuario;
 

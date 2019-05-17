@@ -1,6 +1,8 @@
 package lpweb.projeto.clinica.service;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,40 +16,40 @@ import lpweb.projeto.clinica.repository.MedicoRepository;
 public class MedicoService {
 
 	private final MedicoRepository medicoRepository;
+	private final GenericService<Medico> genericService;
 
 	@Autowired
 	public MedicoService(MedicoRepository medicoRepository) {
 		this.medicoRepository = medicoRepository;
+		this.genericService = new GenericService<>(this.medicoRepository);
 	}
 
 	@Transactional(readOnly = true)
 	public List<Medico> todos() {
-		return medicoRepository.findAll();
+		return genericService.todos();
 	}
 
 	@Transactional
 	public Medico salva(Medico medico) {
-		return medicoRepository.save(medico);
+
+		return genericService.salva(medico);
 
 	}
 
 	@Transactional(readOnly = true)
 	public Medico buscaPor(Integer id) {
-		return medicoRepository.findById(id).get();
+		return genericService.buscaPor(id);
 
 	}
 
 	@Transactional
 	public void excluiPor(Integer id) {
-		medicoRepository.deleteById(id);
+		genericService.excluirPor(id);
 	}
 	
 	@Transactional
     public Medico atualiza(Integer id, Medico medico) {
 
-        Medico medicoSalvo = this.buscaPor(id);
-        BeanUtils.copyProperties(medico, medicoSalvo, "id");
-
-        return  medicoSalvo;
+        return genericService.atualiza(medico, id);
     }
 }

@@ -14,40 +14,38 @@ import lpweb.projeto.clinica.repository.PacienteRepository;
 public class PacienteService {
 
 	private final PacienteRepository pacienteRepository;
-
+	private final GenericService<Paciente> genericService;
 	@Autowired
 	public PacienteService(PacienteRepository pacienteRepository) {
 		this.pacienteRepository = pacienteRepository;
+		this.genericService = new GenericService<>(this.pacienteRepository);
 	}
 
 	@Transactional(readOnly = true)
 	public List<Paciente> todos() {
-		return pacienteRepository.findAll();
+		return genericService.todos();
 	}
 
 	@Transactional
 	public Paciente salva(Paciente paciente) {
-		return pacienteRepository.save(paciente);
+		return genericService.salva(paciente);
 
 	}
 
 	@Transactional(readOnly = true)
 	public Paciente buscaPor(Integer id) {
-		return pacienteRepository.findById(id).get();
+		return genericService.buscaPor(id);
 
 	}
 
 	@Transactional
 	public void excluiPor(Integer id) {
-		pacienteRepository.deleteById(id);
+		genericService.excluirPor(id);
 	}
 	
 	@Transactional
     public Paciente atualiza(Integer id, Paciente paciente) {
 
-        Paciente pacienteSalvo = this.buscaPor(id);
-        BeanUtils.copyProperties(paciente, pacienteSalvo, "id");
-
-        return  pacienteSalvo;
+      return genericService.atualiza(paciente, id);
     }
 }
