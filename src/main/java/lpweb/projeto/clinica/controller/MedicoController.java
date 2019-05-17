@@ -2,8 +2,11 @@ package lpweb.projeto.clinica.controller;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
+import lpweb.projeto.clinica.controller.response.Error;
 import lpweb.projeto.clinica.controller.response.Resposta;
+import lpweb.projeto.clinica.controller.validation.Validacao;
 import lpweb.projeto.clinica.util.PropriedadesUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.RestController;
 import lpweb.projeto.clinica.model.Medico;
 import lpweb.projeto.clinica.service.MedicoService;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/medicos")
@@ -46,7 +51,7 @@ public class MedicoController {
 	
 	@PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Resposta<Medico>> salva(@RequestBody Medico medico) {
+    public ResponseEntity<Resposta<Medico>> salva(@Valid     @RequestBody Medico medico) {
         Medico salvo = medicoService.salva(medico);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(salvo.getId()).toUri();
         Resposta<Medico> resposta = new Resposta<>();
@@ -72,17 +77,26 @@ public class MedicoController {
     }
 
     @PutMapping("/{id}")
-    public Resposta<Medico> altera(@PathVariable  Integer id, @RequestBody Medico medico) {
+    public ResponseEntity<Resposta<Medico>> altera(@PathVariable  Integer id, @RequestBody Medico medico) {
        Medico medicoSalvo = this.medicoService.buscaPor(id);
+
         BeanUtils.copyProperties(medico,
                 medicoSalvo,
                 PropriedadesUtil.obterPropriedadesComNullDe(medico) );
-        Medico medicoAtualizado = this.medicoService.atualiza(id, medicoSalvo);
-        BeanUtils.copyProperties(medicoSalvo, medico);
 
         Resposta<Medico> resposta = new Resposta<>();
-        resposta.setDados(medico);
+        Validacao<Medico> validacao = new Validacao<>();
+        List<Error> erros =  validacao.valida(medico );
 
-        return resposta;
+        if (Objects.nonNull( erros ) &&  !erros.isEmpty() ) {
+            resposta.setErros(erros );
+            return ResponseEntity.badRequest().body(resposta );
+        }
+
+        Medico medicoAtualizado = this.medicoService.atualiza(id, medicoSalvo);
+
+        resposta.setDados(medicoAtualizado);
+
+        return ResponseEntity.ok(resposta);
     }
 }
