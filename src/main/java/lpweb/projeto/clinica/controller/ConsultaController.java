@@ -1,5 +1,7 @@
 package lpweb.projeto.clinica.controller;
 
+import lpweb.projeto.clinica.controller.response.Error;
+import lpweb.projeto.clinica.controller.validation.Validacao;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,6 +16,7 @@ import lpweb.projeto.clinica.util.PropriedadesUtil;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/consultas")
@@ -62,17 +65,26 @@ public class ConsultaController {
     }
 
     @PutMapping("/{id}")
-    public Resposta<Consulta> altera(@PathVariable  Integer id, @RequestBody Consulta consulta) {
-        Consulta consultaSalvo = this.consultaService.buscaPor(id);
+    public ResponseEntity<Resposta<Consulta>> altera(@PathVariable  Integer id, @RequestBody Consulta consulta) {
+        Consulta consultaSalva = this.consultaService.buscaPor(id);
+
         BeanUtils.copyProperties(consulta,
-                consultaSalvo,
+                consultaSalva,
                 PropriedadesUtil.obterPropriedadesComNullDe(consulta) );
-        Consulta consultaAtualizado = this.consultaService.atualiza(id, consultaSalvo);
-        BeanUtils.copyProperties(consultaAtualizado, consulta);
 
         Resposta<Consulta> resposta = new Resposta<>();
-        resposta.setDados(consulta);
+        Validacao<Consulta> validacao = new Validacao<>();
+        List<Error> erros =  validacao.valida(consulta );
 
-        return resposta;
+        if (Objects.nonNull( erros ) &&  !erros.isEmpty() ) {
+            resposta.setErros(erros );
+            return ResponseEntity.badRequest().body(resposta );
+        }
+
+        Consulta consultaAtualizado = this.consultaService.atualiza(id, consultaSalva);
+
+        resposta.setDados(consultaAtualizado);
+
+        return ResponseEntity.ok(resposta);
     }
 }
