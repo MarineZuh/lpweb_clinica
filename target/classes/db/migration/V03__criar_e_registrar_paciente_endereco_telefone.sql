@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS `telefone`
 
 CREATE TABLE IF NOT EXISTS `endereco`
 (
+    `id`          INT(11)      NOT NULL AUTO_INCREMENT,
     `cep`         VARCHAR(9)   NOT NULL,
     `bairro`      VARCHAR(255) NULL DEFAULT NULL,
     `cidade`      VARCHAR(255) NULL DEFAULT NULL,
@@ -32,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `endereco`
     `estado`      VARCHAR(255) NULL DEFAULT NULL,
     `numero`      INT(11)      NOT NULL,
     `rua`         VARCHAR(255) NULL DEFAULT NULL,
-    PRIMARY KEY (`cep`)
+    PRIMARY KEY (`id`)
 ) engine = InnoDB
   DEFAULT CHARSET = utf8;
 
