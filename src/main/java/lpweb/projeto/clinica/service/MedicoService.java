@@ -1,16 +1,13 @@
 package lpweb.projeto.clinica.service;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-
-import org.springframework.beans.BeanUtils;
+import lpweb.projeto.clinica.model.Medico;
+import lpweb.projeto.clinica.repository.MedicoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import lpweb.projeto.clinica.model.Medico;
-import lpweb.projeto.clinica.repository.MedicoRepository;
+import java.util.List;
+
 
 @Service
 public class MedicoService {

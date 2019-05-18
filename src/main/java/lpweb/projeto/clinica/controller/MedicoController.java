@@ -8,11 +8,11 @@ import lpweb.projeto.clinica.controller.response.Error;
 import lpweb.projeto.clinica.controller.response.Resposta;
 import lpweb.projeto.clinica.controller.validation.Validacao;
 import lpweb.projeto.clinica.util.PropriedadesUtil;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,12 +22,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import lpweb.projeto.clinica.model.Medico;
-import lpweb.projeto.clinica.service.MedicoService;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+
+import lpweb.projeto.clinica.model.Medico;
+import lpweb.projeto.clinica.service.MedicoService;
+
 
 @RestController
 @RequestMapping("/medicos")

@@ -2,6 +2,9 @@ package lpweb.projeto.clinica.service;
 
 import java.util.List;
 
+import lpweb.projeto.clinica.model.Endereco;
+import lpweb.projeto.clinica.repository.EnderecoRepository;
+import lpweb.projeto.clinica.repository.TelefoneRepository;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,10 +17,20 @@ import lpweb.projeto.clinica.repository.PacienteRepository;
 public class PacienteService {
 
 	private final PacienteRepository pacienteRepository;
+
 	private final GenericService<Paciente> genericService;
+	private final EnderecoService enderecoService;
+	private final TelefoneService telefoneService;
+
 	@Autowired
-	public PacienteService(PacienteRepository pacienteRepository) {
+	public PacienteService(
+		PacienteRepository pacienteRepository,
+		EnderecoService enderecoService,
+		TelefoneService telefoneService
+	) {
 		this.pacienteRepository = pacienteRepository;
+		this.enderecoService = enderecoService;
+		this.telefoneService = telefoneService;
 		this.genericService = new GenericService<>(this.pacienteRepository);
 	}
 
@@ -28,6 +41,12 @@ public class PacienteService {
 
 	@Transactional
 	public Paciente salva(Paciente paciente) {
+		Endereco endereco = paciente.getEndereco();
+		if(endereco.getId() != null) {
+			endereco = this.enderecoService.buscaPor(endereco.getId());
+			// copiar novos valores? para update
+		}
+		paciente.setEndereco(endereco);
 		return genericService.salva(paciente);
 
 	}

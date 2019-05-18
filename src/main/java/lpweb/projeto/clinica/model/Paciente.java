@@ -27,7 +27,7 @@ public class Paciente {
 
 	@OneToMany( cascade = CascadeType.ALL)
     @JoinColumn(name = "paciente_id") // coluna na tabela telefone
-	private List<Telefone> telefones = new ArrayList<>();
+	private List<Telefone> telefone = new ArrayList<>();
 	
 	@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
@@ -69,10 +69,10 @@ public class Paciente {
 	}
 
 	public List<Telefone> getTelefones() {
-		return telefones;
+		return telefone;
 	}
-	public void setTelefones(List<Telefone> telefones) {
-		this.telefones = telefones;
+	public void setTelefones(List<Telefone> medicos) {
+		this.telefone = medicos;
 	}
 
 	public Endereco getEndereco() {
