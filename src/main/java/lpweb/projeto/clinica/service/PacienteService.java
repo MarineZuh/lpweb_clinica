@@ -48,8 +48,8 @@ public class PacienteService {
 		if(endereco.getId() != null) {
 			endereco = this.enderecoService.buscaPor(endereco.getId());
 			BeanUtils.copyProperties(
-					endereco,
 					paciente.getEndereco(),
+					endereco,
 					PropriedadesUtil.obterPropriedadesComNullDe(paciente.getEndereco())
 			);
 

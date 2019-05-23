@@ -76,9 +76,11 @@ public class MedicoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Resposta<Medico>> altera(@PathVariable  Integer id, @RequestBody Medico medico) {
-        // TODO copiar dados nao nulos para a objeto salvo!
-        Medico medicoSalvo = medicoService.buscaPor(id );
 
+        Medico medicoSalvo = medicoService.buscaPor(id );
+        BeanUtils.copyProperties(medico,
+                medicoSalvo,
+                PropriedadesUtil.obterPropriedadesComNullDe(medico));
         List<Error> erros = this.getErros(medicoSalvo);
         if (existe(erros) ) {
             return ResponseEntity.badRequest().body(Resposta.com(erros ) );
