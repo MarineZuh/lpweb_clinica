@@ -32,9 +32,7 @@ public class ConsultaController {
     public Resposta<List<Consulta>> todos() {
         List<Consulta> consultas = this.consultaService.todos();
 
-        Resposta<List<Consulta>> resposta = new Resposta<>();
-        resposta.setDados(consultas);
-        return resposta;
+        return Resposta.comDadosDe(consultas);
     }
 
     @PostMapping
@@ -42,19 +40,18 @@ public class ConsultaController {
     public ResponseEntity<Resposta<Consulta>> salva(@RequestBody Consulta consulta) {
         Consulta salvo = consultaService.salva(consulta);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(salvo.getId()).toUri();
-        Resposta<Consulta> resposta = new Resposta<>();
-        resposta.setDados(consulta);
 
-        return ResponseEntity.created(uri).body(resposta);
+
+        return ResponseEntity.created(uri).body(Resposta.comDadosDe(consulta));
     }
 
     @GetMapping("/{id}")
     public Resposta<Consulta> buscaPor(@PathVariable Integer id) {
         Consulta consulta = consultaService.buscaPor(id );
-        Resposta<Consulta> resposta = new Resposta<>();
-        resposta.setDados(consulta);
 
-        return resposta;
+
+
+        return Resposta.comDadosDe(consulta);
     }
 
     @DeleteMapping("/{id}")
@@ -66,25 +63,23 @@ public class ConsultaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Resposta<Consulta>> altera(@PathVariable  Integer id, @RequestBody Consulta consulta) {
-        Consulta consultaSalva = this.consultaService.buscaPor(id);
+        // TODO copiar dados nao nulos para a objeto salvo!
+        Consulta consultaSalva = consultaService.buscaPor(id );
 
-        BeanUtils.copyProperties(consulta,
-                consultaSalva,
-                PropriedadesUtil.obterPropriedadesComNullDe(consulta) );
-
-        Resposta<Consulta> resposta = new Resposta<>();
-        Validacao<Consulta> validacao = new Validacao<>();
-        List<Error> erros =  validacao.valida(consulta );
-
-        if (Objects.nonNull( erros ) &&  !erros.isEmpty() ) {
-            resposta.setErros(erros );
-            return ResponseEntity.badRequest().body(resposta );
+        List<Error> erros = this.getErros(consultaSalva );
+        if (existe(erros) ) {
+            return ResponseEntity.badRequest().body(Resposta.com(erros ) );
         }
 
-        Consulta consultaAtualizado = this.consultaService.atualiza(id, consultaSalva);
+        Consulta consultaAtualizada = consultaService.atualiza(id, consultaSalva);
+        return ResponseEntity.ok(Resposta.comDadosDe(consultaAtualizada ));
+    }
 
-        resposta.setDados(consultaAtualizado);
-
-        return ResponseEntity.ok(resposta);
+    private boolean existe(List<Error> erros) {
+        return Objects.nonNull( erros ) &&  !erros.isEmpty();
+    }
+    private List<Error> getErros(Consulta c) {
+        Validacao<Consulta> validacao = new Validacao<>();
+        return validacao.valida(c);
     }
 }

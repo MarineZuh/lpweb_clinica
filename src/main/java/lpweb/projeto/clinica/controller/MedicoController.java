@@ -48,9 +48,7 @@ public class MedicoController {
 	public Resposta<List<Medico>> todos() {
 	    List<Medico> medicos = this.medicoService.todos();
 
-	    Resposta<List<Medico>> resposta = new Resposta<>();
-	    resposta.setDados(medicos);
-        return resposta;
+        return Resposta.comDadosDe(medicos);
     }
 	
 	@PostMapping
@@ -58,19 +56,15 @@ public class MedicoController {
     public ResponseEntity<Resposta<Medico>> salva(@Valid     @RequestBody Medico medico) {
         Medico salvo = medicoService.salva(medico);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(salvo.getId()).toUri();
-        Resposta<Medico> resposta = new Resposta<>();
-        resposta.setDados(medico);
 
-        return ResponseEntity.created(uri).body(resposta);
+        return ResponseEntity.created(uri).body(Resposta.comDadosDe(medico));
     }
 	
 	@GetMapping("/{id}")
     public Resposta<Medico> buscaPor(@PathVariable Integer id) {
         Medico medico = medicoService.buscaPor(id );
-        Resposta<Medico> resposta = new Resposta<>();
-        resposta.setDados(medico);
 
-        return resposta;
+        return Resposta.comDadosDe(medico);
     }
 
     @DeleteMapping("/{id}")
@@ -82,25 +76,23 @@ public class MedicoController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Resposta<Medico>> altera(@PathVariable  Integer id, @RequestBody Medico medico) {
-       Medico medicoSalvo = this.medicoService.buscaPor(id);
+        // TODO copiar dados nao nulos para a objeto salvo!
+        Medico medicoSalvo = medicoService.buscaPor(id );
 
-        BeanUtils.copyProperties(medico,
-                medicoSalvo,
-                PropriedadesUtil.obterPropriedadesComNullDe(medico) );
-
-        Resposta<Medico> resposta = new Resposta<>();
-        Validacao<Medico> validacao = new Validacao<>();
-        List<Error> erros =  validacao.valida(medico );
-
-        if (Objects.nonNull( erros ) &&  !erros.isEmpty() ) {
-            resposta.setErros(erros );
-            return ResponseEntity.badRequest().body(resposta );
+        List<Error> erros = this.getErros(medicoSalvo);
+        if (existe(erros) ) {
+            return ResponseEntity.badRequest().body(Resposta.com(erros ) );
         }
 
-        Medico medicoAtualizado = this.medicoService.atualiza(id, medicoSalvo);
+        Medico medicoAtualizada = medicoService.atualiza(id, medicoSalvo);
+        return ResponseEntity.ok(Resposta.comDadosDe(medicoAtualizada ));
+    }
 
-        resposta.setDados(medicoAtualizado);
-
-        return ResponseEntity.ok(resposta);
+    private boolean existe(List<Error> erros) {
+        return Objects.nonNull( erros ) &&  !erros.isEmpty();
+    }
+    private List<Error> getErros(Medico c) {
+        Validacao<Medico> validacao = new Validacao<>();
+        return validacao.valida(c);
     }
 }

@@ -68,7 +68,7 @@ public class PacienteRepositoryImpl implements PacienteRepositoryQuery {
 
         if ( !StringUtils.isEmpty( filtro.getNomeCrianca()) ) {
             predicates.add(
-                cBuilder.like(cBuilder.lower(pacienteRoot.get("nome")),
+                cBuilder.like(cBuilder.lower(pacienteRoot.get("nomeCrianca")),
                 "%" + filtro.getNomeCrianca().toLowerCase() + "%" )
             );
 

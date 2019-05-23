@@ -9,6 +9,7 @@ import lpweb.projeto.clinica.controller.event.HeaderLocationEvento;
 import lpweb.projeto.clinica.controller.response.Resposta;
 import lpweb.projeto.clinica.controller.response.Error;
 import lpweb.projeto.clinica.controller.validation.Validacao;
+import lpweb.projeto.clinica.repository.filter.PacienteFiltro;
 import lpweb.projeto.clinica.util.PropriedadesUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +48,15 @@ public class PacienteController {
         this.pacienteService = pacienteService;
     }
 
+
+    @GetMapping
+    public Resposta<Page<Paciente>> busca(PacienteFiltro filtro, Pageable page  ) {
+
+        Page<Paciente> pacientes = pacienteService.busca(filtro, page );
+
+        return Resposta.comDadosDe(pacientes );
+    }
+    /*
     @GetMapping
     public Resposta<Page<Paciente>> todos(
         @RequestParam(defaultValue = "0") Integer pagina,
@@ -61,6 +71,7 @@ public class PacienteController {
         resposta.setDados(pacientes);
         return resposta;
     }
+     */
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -72,21 +83,17 @@ public class PacienteController {
 
         publisher.publishEvent(new HeaderLocationEvento(this, response, salvo.getId() ));
 
-        Resposta<Paciente> resposta = new Resposta<>();
-        resposta.setDados(paciente);
+
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(resposta );
+                .body(Resposta.comDadosDe(salvo) );
     }
 
     @GetMapping("/{id}")
     public Resposta<Paciente> buscaPor(@PathVariable Integer id) {
         Paciente paciente = pacienteService.buscaPor(id );
-        Resposta<Paciente> resposta = new Resposta<>();
-        resposta.setDados(paciente);
-
-        return resposta;
+        return Resposta.comDadosDe(paciente);
     }
 
     @DeleteMapping("/{id}")
@@ -98,25 +105,23 @@ public class PacienteController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Resposta<Paciente>> altera(@PathVariable  Integer id, @RequestBody Paciente paciente) {
-        Paciente pacienteSalvo = this.pacienteService.buscaPor(id);
+        // TODO copiar dados nao nulos para a objeto salvo!
+        Paciente pacienteSalva = pacienteService.buscaPor(id );
 
-        BeanUtils.copyProperties(paciente,
-                pacienteSalvo,
-                PropriedadesUtil.obterPropriedadesComNullDe(paciente) );
-
-        Resposta<Paciente> resposta = new Resposta<>();
-        Validacao<Paciente> validacao = new Validacao<>();
-        List<Error> erros =  validacao.valida(paciente );
-
-        if (Objects.nonNull( erros ) &&  !erros.isEmpty() ) {
-            resposta.setErros(erros );
-            return ResponseEntity.badRequest().body(resposta );
+        List<Error> erros = this.getErros(pacienteSalva );
+        if (existe(erros) ) {
+            return ResponseEntity.badRequest().body(Resposta.com(erros ) );
         }
 
-        Paciente pacienteAtualizado = this.pacienteService.atualiza(id, pacienteSalvo);
+        Paciente pacienteAtualizada = pacienteService.atualiza(id, pacienteSalva);
+        return ResponseEntity.ok(Resposta.comDadosDe(pacienteAtualizada ));
+    }
 
-        resposta.setDados(pacienteAtualizado);
-
-        return ResponseEntity.ok(resposta);
+    private boolean existe(List<Error> erros) {
+        return Objects.nonNull( erros ) &&  !erros.isEmpty();
+    }
+    private List<Error> getErros(Paciente c) {
+        Validacao<Paciente> validacao = new Validacao<>();
+        return validacao.valida(c);
     }
 }

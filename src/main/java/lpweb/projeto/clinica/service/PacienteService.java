@@ -4,6 +4,7 @@ import java.util.List;
 
 import lpweb.projeto.clinica.model.Endereco;
 
+import lpweb.projeto.clinica.repository.filter.PacienteFiltro;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,5 +71,8 @@ public class PacienteService {
 
 	public Page<Paciente> buscaPaginada(Pageable page) {
 		return this.pacienteRepository.findAll(page );
+	}
+	public Page<Paciente> busca(PacienteFiltro filtro, Pageable pageable) {
+		return pacienteRepository.filtrar(filtro, pageable );
 	}
 }

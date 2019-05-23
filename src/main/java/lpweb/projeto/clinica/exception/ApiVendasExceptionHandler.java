@@ -18,9 +18,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @RestControllerAdvice
 public class ApiVendasExceptionHandler  extends ResponseEntityExceptionHandler {
+
     @Autowired
     private MessageSource messageSource;
 
@@ -28,42 +30,31 @@ public class ApiVendasExceptionHandler  extends ResponseEntityExceptionHandler {
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
                                                                   HttpHeaders headers, HttpStatus status,
                                                                   WebRequest request) {
-        final Resposta<Error> resp = new Resposta<>();
         final String mensagem = messageSource.getMessage("parametro.invalido", null, new Locale("pt", "BR"));
 
-        resp.adiciona(new Error(mensagem, ex.getLocalizedMessage()) );
+        final Resposta resposta = Resposta.com(new Error(mensagem, ex.getLocalizedMessage()));
 
-        return super.handleExceptionInternal(ex, resp, headers, HttpStatus.BAD_REQUEST, request);
+        return super.handleExceptionInternal(ex, resposta, headers, HttpStatus.BAD_REQUEST, request);
     }
 
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
                                                                   HttpHeaders headers, HttpStatus status, WebRequest request) {
+        final List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
 
-        final Resposta<Error> resp = new Resposta<>();
-        List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+        final List<Error> erros = fieldErrors.stream()
+                .map(fieldError -> new Error(fieldError.getDefaultMessage(), ex.getLocalizedMessage()))
+                .collect(Collectors.toList());
 
-        fieldErrors.forEach(fieldError ->
-                resp.adiciona(
-                        new Error(fieldError.getDefaultMessage(),
-                                ex.getLocalizedMessage() )) );
-
-        return super.handleExceptionInternal(ex, resp, headers, HttpStatus.BAD_REQUEST, request);
-
+        return super.handleExceptionInternal(ex, Resposta.com(erros), headers, HttpStatus.BAD_REQUEST, request);
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
     public Resposta<Error> handleEmptyResultDataAccess(EmptyResultDataAccessException ex) {
 
-        Resposta<Error> resposta = new Resposta<>();
-
-        String mensagem = String.format("Recurso nao encontrado, esperado %d, encontrado %d ",
+        String mensagem = String.format("Recurso nao encontrado, Quantidade Esperada %d, Quantidade Encontrada %d ",
                 ex.getExpectedSize(), ex.getActualSize());
-        resposta.adiciona(new Error(mensagem, ex.getMostSpecificCause().toString() ));
-
-        return resposta;
-
-
+        return Resposta.com( new Error(mensagem, ex.getMostSpecificCause().toString() ) );
     }
 }
