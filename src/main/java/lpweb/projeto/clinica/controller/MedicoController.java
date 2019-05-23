@@ -10,6 +10,7 @@ import lpweb.projeto.clinica.controller.validation.Validacao;
 import lpweb.projeto.clinica.util.PropriedadesUtil;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,7 +34,9 @@ import lpweb.projeto.clinica.service.MedicoService;
 @RestController
 @RequestMapping("/medicos")
 public class MedicoController {
-	
+
+
+
 	private final MedicoService medicoService;
 	
 	@Autowired

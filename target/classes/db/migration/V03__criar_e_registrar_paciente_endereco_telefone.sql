@@ -37,9 +37,39 @@ CREATE TABLE IF NOT EXISTS `endereco`
 ) engine = InnoDB
   DEFAULT CHARSET = utf8;
 
-INSERT INTO endereco (cep, rua, bairro, numero, complemento, cidade, estado)
-VALUES ('66066-666', '07', 'Cohatrac', 17, '', 'São Luis', 'Maranhão');
-INSERT INTO paciente (nome_crianca, nome_responsavel, data_nascimento, sexo, endereco_id, plano_saude_id)
-VALUES ('Maria', 'Ana', '2006-04-03', 'F', 1, null);
-INSERT INTO telefone (tipo, numero, nome_contato, paciente_id)
-VALUES ('celular', '09812344321', 'Ana', 1);
+INSERT INTO endereco (id, cep, rua, bairro, numero, complemento, cidade, estado)
+VALUES (1, '66066-666', '07', 'Cohatrac', 17, '', 'São Luis', 'Maranhão');
+INSERT INTO endereco (id, cep, rua, bairro, numero, complemento, cidade, estado)
+VALUES (2, '66066-444', '17', 'Cohab', 20, '', 'São Luis', 'Maranhão');
+INSERT INTO endereco (id, cep, rua, bairro, numero, complemento, cidade, estado)
+VALUES (3, '12341-444', 'Cardoso Filho', 'Vinhais', 15, '', 'São Luis', 'Maranhão');
+INSERT INTO endereco (id, cep, rua, bairro, numero, complemento, cidade, estado)
+VALUES (4, '66066-123', 'Afogados', 'Centro', 10, '', 'São Luis', 'Maranhão');
+INSERT INTO endereco (id, cep, rua, bairro, numero, complemento, cidade, estado)
+VALUES (5, '20195-123', 'Muidos', 'Alemanha', 09, '', 'São Luis', 'Maranhão');
+
+
+INSERT INTO paciente (id, nome_crianca, nome_responsavel, data_nascimento, sexo, endereco_id, plano_saude_id)
+VALUES (1, 'Maria', 'Ana', '2006-04-03', 'F', 1, null);
+INSERT INTO paciente (id, nome_crianca, nome_responsavel, data_nascimento, sexo, endereco_id, plano_saude_id)
+VALUES (2, 'João', 'Ana', '2007-10-10', 'M', 1, null);
+INSERT INTO paciente (id, nome_crianca, nome_responsavel, data_nascimento, sexo, endereco_id, plano_saude_id)
+VALUES (3, 'Paula', 'Julia', '2011-04-03', 'F', 2, null);
+INSERT INTO paciente (id, nome_crianca, nome_responsavel, data_nascimento, sexo, endereco_id, plano_saude_id)
+VALUES (4, 'Pedro', 'Marilene', '2018-10-10', 'M', 3, null);
+INSERT INTO paciente (id,nome_crianca, nome_responsavel, data_nascimento, sexo, endereco_id, plano_saude_id)
+VALUES (5, 'Paulo', 'Mario', '2011-04-03', 'F', 4, null);
+
+
+INSERT INTO telefone (id, tipo, numero, nome_contato, paciente_id)
+VALUES (1, 'celular', '09812344321', 'Ana', 1);
+INSERT INTO telefone (id, tipo, numero, nome_contato, paciente_id)
+VALUES (2, 'celular', '09812344321', 'Ana', 2);
+INSERT INTO telefone (id, tipo, numero, nome_contato, paciente_id)
+VALUES (3, 'celular', '09815477251', 'Julia', 3);
+INSERT INTO telefone (id, tipo, numero, nome_contato, paciente_id)
+VALUES (4, 'celular', '09846378163', 'Marilene', 4);
+INSERT INTO telefone (id, tipo, numero, nome_contato, paciente_id)
+VALUES (5, 'celular', '09815477251', 'Miranda', 5);
+INSERT INTO telefone (id, tipo, numero, nome_contato, paciente_id)
+VALUES (6, 'celular', '09846378163', 'Mario', 5);

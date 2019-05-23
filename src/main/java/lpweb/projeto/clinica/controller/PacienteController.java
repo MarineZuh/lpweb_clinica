@@ -5,59 +5,79 @@ import java.util.Objects;
 
 import java.net.URI;
 
+import lpweb.projeto.clinica.controller.event.HeaderLocationEvento;
 import lpweb.projeto.clinica.controller.response.Resposta;
 import lpweb.projeto.clinica.controller.response.Error;
 import lpweb.projeto.clinica.controller.validation.Validacao;
 import lpweb.projeto.clinica.util.PropriedadesUtil;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lpweb.projeto.clinica.model.Paciente;
 import lpweb.projeto.clinica.service.PacienteService;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/pacientes")
 public class PacienteController {
 
+    @Value("${paginacao.qtd_por_pagina}")
+    private Integer quantidadePorPagina;
     private final PacienteService pacienteService;
+    private ApplicationEventPublisher publisher;
 
     @Autowired
-    public PacienteController(PacienteService pacienteService) {
+    public PacienteController(
+        PacienteService pacienteService,
+        ApplicationEventPublisher publisher
+    ) {
+        this.publisher = publisher;
         this.pacienteService = pacienteService;
     }
 
     @GetMapping
-    public Resposta<List<Paciente>> todos() {
-        List<Paciente> pacientes = this.pacienteService.todos();
+    public Resposta<Page<Paciente>> todos(
+        @RequestParam(defaultValue = "0") Integer pagina,
+        @RequestParam(defaultValue = "3")Integer tamanho,
+        @RequestParam(defaultValue = "nomeCrianca")String orderBy,
+        @RequestParam(defaultValue = "ASC")String direcao
+    ) {
+        final Pageable page = PageRequest.of(pagina, tamanho, Sort.Direction.valueOf(direcao), orderBy);
+        Page<Paciente> pacientes = this.pacienteService.buscaPaginada(page);
 
-        Resposta<List<Paciente>> resposta = new Resposta<>();
+        Resposta<Page<Paciente>> resposta = new Resposta<>();
         resposta.setDados(pacientes);
         return resposta;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Resposta<Paciente>> salva(@Valid @RequestBody Paciente paciente) {
+    public ResponseEntity<Resposta<Paciente>> salva(
+        @Valid @RequestBody Paciente paciente,
+        HttpServletResponse response
+    ) {
         Paciente salvo = pacienteService.salva(paciente);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}").buildAndExpand(salvo.getId()).toUri();
+
+        publisher.publishEvent(new HeaderLocationEvento(this, response, salvo.getId() ));
+
         Resposta<Paciente> resposta = new Resposta<>();
         resposta.setDados(paciente);
 
-        return ResponseEntity.created(uri).body(resposta);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(resposta );
     }
 
     @GetMapping("/{id}")
