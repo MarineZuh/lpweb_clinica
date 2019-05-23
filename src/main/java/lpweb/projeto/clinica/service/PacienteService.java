@@ -5,6 +5,8 @@ import java.util.List;
 import lpweb.projeto.clinica.model.Endereco;
 
 import lpweb.projeto.clinica.repository.filter.PacienteFiltro;
+import lpweb.projeto.clinica.util.PropriedadesUtil;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +47,12 @@ public class PacienteService {
 		Endereco endereco = paciente.getEndereco();
 		if(endereco.getId() != null) {
 			endereco = this.enderecoService.buscaPor(endereco.getId());
-			// copiar novos valores? para update
+			BeanUtils.copyProperties(
+					endereco,
+					paciente.getEndereco(),
+					PropriedadesUtil.obterPropriedadesComNullDe(paciente.getEndereco())
+			);
+
 		}
 		paciente.setEndereco(endereco);
 		return genericService.salva(paciente);

@@ -41,8 +41,8 @@ public class PacienteController {
 
     @Autowired
     public PacienteController(
-        PacienteService pacienteService,
-        ApplicationEventPublisher publisher
+            PacienteService pacienteService,
+            ApplicationEventPublisher publisher
     ) {
         this.publisher = publisher;
         this.pacienteService = pacienteService;
@@ -50,11 +50,11 @@ public class PacienteController {
 
 
     @GetMapping
-    public Resposta<Page<Paciente>> busca(PacienteFiltro filtro, Pageable page  ) {
+    public Resposta<Page<Paciente>> busca(PacienteFiltro filtro, Pageable page) {
 
-        Page<Paciente> pacientes = pacienteService.busca(filtro, page );
+        Page<Paciente> pacientes = pacienteService.busca(filtro, page);
 
-        return Resposta.comDadosDe(pacientes );
+        return Resposta.comDadosDe(pacientes);
     }
     /*
     @GetMapping
@@ -76,23 +76,22 @@ public class PacienteController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Resposta<Paciente>> salva(
-        @Valid @RequestBody Paciente paciente,
-        HttpServletResponse response
+            @Valid @RequestBody Paciente paciente,
+            HttpServletResponse response
     ) {
         Paciente salvo = pacienteService.salva(paciente);
 
-        publisher.publishEvent(new HeaderLocationEvento(this, response, salvo.getId() ));
-
+        publisher.publishEvent(new HeaderLocationEvento(this, response, salvo.getId()));
 
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(Resposta.comDadosDe(salvo) );
+                .body(Resposta.comDadosDe(salvo));
     }
 
     @GetMapping("/{id}")
     public Resposta<Paciente> buscaPor(@PathVariable Integer id) {
-        Paciente paciente = pacienteService.buscaPor(id );
+        Paciente paciente = pacienteService.buscaPor(id);
         return Resposta.comDadosDe(paciente);
     }
 
@@ -100,26 +99,30 @@ public class PacienteController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void exclui(@PathVariable Integer id) {
 
-        pacienteService.excluiPor(id );
+        pacienteService.excluiPor(id);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Resposta<Paciente>> altera(@PathVariable  Integer id, @RequestBody Paciente paciente) {
-        // TODO copiar dados nao nulos para a objeto salvo!
-        Paciente pacienteSalva = pacienteService.buscaPor(id );
+    public ResponseEntity<Resposta<Paciente>> altera(@PathVariable Integer id, @RequestBody Paciente paciente) {
+        Paciente pacienteSalva = pacienteService.buscaPor(id);
+        BeanUtils.copyProperties(paciente,
+                pacienteSalva,
+                PropriedadesUtil.obterPropriedadesComNullDe(paciente));
 
-        List<Error> erros = this.getErros(pacienteSalva );
-        if (existe(erros) ) {
-            return ResponseEntity.badRequest().body(Resposta.com(erros ) );
+
+        List<Error> erros = this.getErros(pacienteSalva);
+        if (existe(erros)) {
+            return ResponseEntity.badRequest().body(Resposta.com(erros));
         }
 
         Paciente pacienteAtualizada = pacienteService.atualiza(id, pacienteSalva);
-        return ResponseEntity.ok(Resposta.comDadosDe(pacienteAtualizada ));
+        return ResponseEntity.ok(Resposta.comDadosDe(pacienteAtualizada));
     }
 
     private boolean existe(List<Error> erros) {
-        return Objects.nonNull( erros ) &&  !erros.isEmpty();
+        return Objects.nonNull(erros) && !erros.isEmpty();
     }
+
     private List<Error> getErros(Paciente c) {
         Validacao<Paciente> validacao = new Validacao<>();
         return validacao.valida(c);

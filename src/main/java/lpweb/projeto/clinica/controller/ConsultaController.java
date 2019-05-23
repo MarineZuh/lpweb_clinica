@@ -63,9 +63,11 @@ public class ConsultaController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Resposta<Consulta>> altera(@PathVariable  Integer id, @RequestBody Consulta consulta) {
-        // TODO copiar dados nao nulos para a objeto salvo!
-        Consulta consultaSalva = consultaService.buscaPor(id );
 
+        Consulta consultaSalva = consultaService.buscaPor(id );
+        BeanUtils.copyProperties(consulta,
+                consultaSalva,
+                PropriedadesUtil.obterPropriedadesComNullDe(consulta));
         List<Error> erros = this.getErros(consultaSalva );
         if (existe(erros) ) {
             return ResponseEntity.badRequest().body(Resposta.com(erros ) );
