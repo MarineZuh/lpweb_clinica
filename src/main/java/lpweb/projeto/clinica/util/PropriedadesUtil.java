@@ -1,5 +1,6 @@
 package lpweb.projeto.clinica.util;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -16,5 +17,13 @@ public class PropriedadesUtil {
                 .filter(propertyName -> wrappedSource.getPropertyValue(propertyName) == null
                         || propertyName.equals("id"))
                 .toArray(String[]::new);
+    }
+
+    public static void copiarPropriedades(Object origem, Object destino) {
+        BeanUtils.copyProperties(
+            origem,
+            destino,
+            obterPropriedadesComNullDe(origem)
+        );
     }
 }

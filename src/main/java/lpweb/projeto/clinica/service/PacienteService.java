@@ -47,12 +47,7 @@ public class PacienteService {
 		Endereco endereco = paciente.getEndereco();
 		if(endereco.getId() != null) {
 			endereco = this.enderecoService.buscaPor(endereco.getId());
-			BeanUtils.copyProperties(
-					paciente.getEndereco(),
-					endereco,
-					PropriedadesUtil.obterPropriedadesComNullDe(paciente.getEndereco())
-			);
-
+			PropriedadesUtil.copiarPropriedades(paciente.getEndereco(), endereco);
 		}
 		paciente.setEndereco(endereco);
 		return genericService.salva(paciente);

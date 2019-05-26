@@ -78,9 +78,7 @@ public class MedicoController {
     public ResponseEntity<Resposta<Medico>> altera(@PathVariable  Integer id, @RequestBody Medico medico) {
 
         Medico medicoSalvo = medicoService.buscaPor(id );
-        BeanUtils.copyProperties(medico,
-                medicoSalvo,
-                PropriedadesUtil.obterPropriedadesComNullDe(medico));
+        PropriedadesUtil.copiarPropriedades(medico, medicoSalvo);
         List<Error> erros = this.getErros(medicoSalvo);
         if (existe(erros) ) {
             return ResponseEntity.badRequest().body(Resposta.com(erros ) );

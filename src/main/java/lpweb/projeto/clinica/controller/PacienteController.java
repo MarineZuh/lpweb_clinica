@@ -105,10 +105,7 @@ public class PacienteController {
     @PutMapping("/{id}")
     public ResponseEntity<Resposta<Paciente>> altera(@PathVariable Integer id, @RequestBody Paciente paciente) {
         Paciente pacienteSalva = pacienteService.buscaPor(id);
-        BeanUtils.copyProperties(paciente,
-                pacienteSalva,
-                PropriedadesUtil.obterPropriedadesComNullDe(paciente));
-
+        PropriedadesUtil.copiarPropriedades(paciente, pacienteSalva);
 
         List<Error> erros = this.getErros(pacienteSalva);
         if (existe(erros)) {

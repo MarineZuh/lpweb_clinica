@@ -65,9 +65,7 @@ public class ConsultaController {
     public ResponseEntity<Resposta<Consulta>> altera(@PathVariable  Integer id, @RequestBody Consulta consulta) {
 
         Consulta consultaSalva = consultaService.buscaPor(id );
-        BeanUtils.copyProperties(consulta,
-                consultaSalva,
-                PropriedadesUtil.obterPropriedadesComNullDe(consulta));
+        PropriedadesUtil.copiarPropriedades(consulta, consultaSalva);
         List<Error> erros = this.getErros(consultaSalva );
         if (existe(erros) ) {
             return ResponseEntity.badRequest().body(Resposta.com(erros ) );
