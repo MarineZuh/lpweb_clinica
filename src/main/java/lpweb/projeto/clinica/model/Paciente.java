@@ -1,5 +1,7 @@
 package lpweb.projeto.clinica.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -21,6 +23,7 @@ public class Paciente {
 	private String nomeResponsavel;
 
 	@Column(name = "data_nascimento")
+	@JsonFormat(pattern="dd/MM/yyyy")
 	private Date dataNascimento;
 
 	private char sexo;
