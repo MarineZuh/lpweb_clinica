@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import lpweb.projeto.clinica.model.Paciente;
 import lpweb.projeto.clinica.service.PacienteService;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletResponse;
@@ -90,9 +91,13 @@ public class PacienteController {
     }
 
     @GetMapping("/{id}")
-    public Resposta<Paciente> buscaPor(@PathVariable Integer id) {
+    public ResponseEntity<Resposta<Paciente>> buscaPor(@PathVariable Integer id) {
         Paciente paciente = pacienteService.buscaPor(id);
-        return Resposta.comDadosDe(paciente);
+        Resposta<Paciente> resposta = Resposta.comDadosDe(paciente);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body( resposta);
+
     }
 
     @DeleteMapping("/{id}")

@@ -40,7 +40,7 @@ public class PacienteRepositoryImpl implements PacienteRepositoryQuery {
         // 4. monta a consulta com as restrições
         cQuery.select(pacienteRoot)
                 .where(restricoes )
-                .orderBy( cBuilder.desc(pacienteRoot.get("nomeCrianca")) );
+                .orderBy( cBuilder.asc(pacienteRoot.get("nomeCrianca")) );
 
         // 5. cria e executa a consula
         TypedQuery<Paciente> query = manager.createQuery(cQuery);

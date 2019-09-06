@@ -31,6 +31,14 @@ public class Resposta<T> {
     public void setErros(List<Error> erros) {
         this.erros = erros;
     }
+    public boolean hasErrors() {
+        if(this.erros.size() == 0) return false;
+        return true;
+    }
+    public boolean hasDados(){
+        if(this.dados == null) return false;
+        return true;
+    }
 
     public T getDados() {
         return dados;

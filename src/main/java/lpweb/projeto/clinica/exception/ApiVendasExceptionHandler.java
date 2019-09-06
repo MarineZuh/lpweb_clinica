@@ -51,10 +51,10 @@ public class ApiVendasExceptionHandler  extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    public Resposta<Error> handleEmptyResultDataAccess(EmptyResultDataAccessException ex) {
+    public ResponseEntity<Resposta<Error>> handleEmptyResultDataAccess(EmptyResultDataAccessException ex) {
 
         String mensagem = String.format("Recurso nao encontrado, Quantidade Esperada %d, Quantidade Encontrada %d ",
                 ex.getExpectedSize(), ex.getActualSize());
-        return Resposta.com( new Error(mensagem, ex.getMostSpecificCause().toString() ) );
+        return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(Resposta.com( new Error(mensagem, ex.getMostSpecificCause().toString() ) ));
     }
 }
