@@ -52,7 +52,7 @@ public class PacienteController {
 
     @GetMapping
     public Resposta<Page<Paciente>> busca(PacienteFiltro filtro, Pageable page) {
-
+        System.out.println(filtro.toString());
         Page<Paciente> pacientes = pacienteService.busca(filtro, page);
 
         return Resposta.comDadosDe(pacientes);

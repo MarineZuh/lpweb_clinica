@@ -2,6 +2,8 @@ package lpweb.projeto.clinica;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
@@ -18,4 +20,5 @@ public class ClinicaApplication {
 		// data time sem conversao de time zone
 		TimeZone.setDefault(TimeZone.getTimeZone("Etc/UTC"));
 	}
+
 }

@@ -1,5 +1,8 @@
 package lpweb.projeto.clinica.repository.filter;
 
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class PacienteFiltro {
@@ -7,7 +10,8 @@ public class PacienteFiltro {
     private Integer id;
     private String nomeCrianca;
     private String nomeResponsavel;
-    private Date dataNascimento;
+
+    private String dataNascimento;
     private char sexo;
 
     public PacienteFiltro() {
@@ -38,10 +42,16 @@ public class PacienteFiltro {
     }
 
     public Date getDataNascimento() {
-        return dataNascimento;
+        SimpleDateFormat s = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            return s.parse(this.dataNascimento);
+        } catch (Exception e) {
+//            e.printStackTrace();
+        }
+        return null;
     }
 
-    public void setDataNascimento(Date dataNascimento) {
+    public void setDataNascimento(String dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 

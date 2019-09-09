@@ -27,7 +27,7 @@ public class GenericService<T> {
         T entityDoBanco = this.buscaPor(id);
         BeanUtils.copyProperties(entity, entityDoBanco, "id");
 
-        return entityDoBanco;
+        return this.salva(entityDoBanco);
     }
 
 

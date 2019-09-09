@@ -23,20 +23,20 @@ public class Paciente {
 	private String nomeResponsavel;
 
 	@Column(name = "data_nascimento")
-	@JsonFormat(pattern="dd/MM/yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="dd/MM/yyyy")
 	private Date dataNascimento;
 
 	private char sexo;
 
-	@OneToMany( cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "paciente_id") // coluna na tabela telefone
 	private List<Telefone> telefone = new ArrayList<>();
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id")
 	private Endereco endereco;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "plano_saude_id")
 	private PlanoSaude planoSaude;
 
